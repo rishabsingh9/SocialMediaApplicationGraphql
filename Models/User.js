@@ -19,11 +19,5 @@ const userSchema=new Schema({
     saved: [{type: Schema.Types.ObjectId, ref: 'user'}]
 })
 
-// const userSchema = new Schema({
-//     username: String,
-//     password: String,
-//     email: String,
-//     createdAt: String
-//   });
 
 module.exports=model('user',userSchema);

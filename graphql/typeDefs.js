@@ -42,7 +42,9 @@ type User{
     username:String!,
     token:String!,
     email:String!,
-    createdAt:String!
+    createdAt:String!,
+    followers: [ID!]!,
+  following: [ID!]!
 }
 
 # type Post{
@@ -68,6 +70,8 @@ type Mutation{
     likePost(postId:ID!):Post!
     createComment(postId: ID!, body: String!): Post!
     deleteComment(postId: ID!, commentId: ID!): Post!
+    follow(userId: ID!): User!
+    unfollow(userId:ID!):User!
     
 }
 type Subscription {
