@@ -69,11 +69,6 @@ module.exports = {
         token,
       };
     },
-  },
-};
-
-module.exports = {
-  Mutation: {
     async login(_, {loginInput:{username,password}}) {
       const { isvalid, errors } = validateLoginInput(username, password);
       if (!isvalid) {
@@ -84,19 +79,49 @@ module.exports = {
         errors.general = "User doesn't exist";
         throw new UserInputError("Errors", { errors });
       }
-
+  
       const passwordMatching=await bcrypt.compare(password,user.password);
       if(!passwordMatching){
         errors.general='wrong password'
         throw new UserInputError("Error",{errors});
       }
       const token=generateAccessToken(user);
-
+  
       return {
         ...user._doc,
         id: user._id,
         token
       };
     },
+
   },
 };
+
+// module.exports = {
+//   Mutation: {
+//     async login(_, {loginInput:{username,password}}) {
+//       const { isvalid, errors } = validateLoginInput(username, password);
+//       if (!isvalid) {
+//         throw new UserInputError("Error", { errors });
+//       }
+//       const user = await User.findOne({ username });
+//       if (!user) {
+//         errors.general = "User doesn't exist";
+//         throw new UserInputError("Errors", { errors });
+//       }
+
+//       const passwordMatching=await bcrypt.compare(password,user.password);
+//       if(!passwordMatching){
+//         errors.general='wrong password'
+//         throw new UserInputError("Error",{errors});
+//       }
+//       const token=generateAccessToken(user);
+
+//       return {
+//         ...user._doc,
+//         id: user._id,
+//         token
+//       };
+//     },
+//   },
+// };

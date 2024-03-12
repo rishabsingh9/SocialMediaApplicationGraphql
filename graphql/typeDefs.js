@@ -29,12 +29,20 @@ type Post{
     body:String!
     createdAt:String!
 }
+
+
+
 type Query{
     getPosts:[Post!]!
+    getPost(postId:String!):Post!
+    getAllMyPosts:[Post!]!
 }
 
 type Mutation{
     register(registerInput:Registerinput):User!
     login(loginInput:LoginInput):User!
+    createPost(body: String!): Post!
+    deleteMyPost(postId:String!):String!
+    
 }
 `
