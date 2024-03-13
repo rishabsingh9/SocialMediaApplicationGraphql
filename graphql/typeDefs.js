@@ -44,7 +44,8 @@ type User{
     email:String!,
     createdAt:String!,
     followers: [ID!]!,
-  following: [ID!]!
+  following: [ID!]!,
+  saved:[ID!]!
 }
 
 # type Post{
@@ -72,6 +73,8 @@ type Mutation{
     deleteComment(postId: ID!, commentId: ID!): Post!
     follow(userId: ID!): User!
     unfollow(userId:ID!):User!
+    savePost(postId:ID!):User!
+    unsavePost(postId:ID!):User!
     
 }
 type Subscription {

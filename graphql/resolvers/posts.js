@@ -1,5 +1,6 @@
 const { AuthenticationError, UserInputError } = require('apollo-server');
 const Post=require('../../Models/Post');
+const User=require('../../Models/User');
 const{USER_KEY,USER_SECRET}=require('../../config');
 const checkAuth=require('../../util/check-auth');
 
@@ -107,7 +108,50 @@ Query:{
         } catch (error) {
             throw new Error(error);
         }
+    },
+    async savePost(_,{postId},context){
+        try {
+            const returnedUser=checkAuth(context);
+            const user=await User.findById(returnedUser.id);
+            const post=await Post.findById(postId);
+
+            if( !user.saved.includes(post._id)){
+                user.saved.push(post._id);
+                await user.save();
+            }
+            else{
+                return new Error("already saved ");
+            }
+            return user;
+
+        } catch (error) {
+            throw new Error("error");
+        }
+    },
+    async unsavePost(_,{postId},context){
+        try {
+           const returnedUser=checkAuth(context);
+           const user =await User.findById(returnedUser.id);
+           const post=await Post.findById(postId);
+           if(post){
+            if(user.saved.includes(post._id)){
+                const removed=user.saved.filter(currPost=>currPost._id.toString()!==postId);
+                user.saved=removed;
+                await user.save();
+            }
+            else{
+                throw new  Error("Already unsaved the post")
+            }
+           }
+           else{
+            throw new Error("Post not found")
+           }
+           return user;
+        } catch (error) {
+            throw new Error(error);
+        }
     }
+
     },
     Subscription: {
         newPost: {

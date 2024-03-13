@@ -120,6 +120,7 @@ module.exports = {
       else{
         throw new Error("Already in following")
       }
+      
 
       return userToFollow;
 
@@ -152,14 +153,25 @@ module.exports = {
       if (!toUnfollow) {
         throw new Error('User not found');
       }
-    
-      let updatedFollowing = user.following.filter(followerId => followerId!== userId);
+      console.log("user following ",user.following[0].toString())
+      if(user.following.includes(userId)){
+      let updatedFollowing = user.following.filter(followerId => {
+        return followerId.toString()!== userId
+      });
       user.following = updatedFollowing;
+      console.log("first true ",userId);
       await user.save();
+      }
     
-      let updatedFollowers = toUnfollow.followers.filter(followerId => followerId !== returnedUser.id);
+      if(toUnfollow.followers.includes(user._id)){
+      let updatedFollowers = toUnfollow.followers.filter(followerId => followerId.toString() !== user._id.toString());
       toUnfollow.followers = updatedFollowers;
+      console.log("true ",user._id);
       await toUnfollow.save();
+      }
+      else{
+        throw new Error("already unfollowed the user");
+      }
     
       return toUnfollow; // Assuming you want to return the updated following list
     }
